@@ -16,7 +16,6 @@ permissions:
   id-token: write
 
 # Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
-
 concurrency:
   group: "pages"
   cancel-in-progress: false
@@ -31,13 +30,20 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+      - name: Clear GitHub Pages cache
+        run: |
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
+          git pull
+        # This step clears the GitHub Pages cache by performing a git pull with appropriate config.
       - name: Setup Pages
         uses: actions/configure-pages@v3
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v2
-        with:
-          # Upload entire repository
-          path: '.'
+          with:
+            # Upload entire repository
+            path: '.'
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v2
+
